@@ -27,11 +27,7 @@ npm run build:ts
 ``` app.json
 {
     "change2h5Page": [
-        "pages/order-manage/order-after-sales-detail-v2/order-after-sales-detail-v2",
-        "pages/public-pages/address-library/address-library",
-        "pages/order-manage/order-refund/order-refund",
-        "pages/order-manage/order-detail/order-detail",
-        "pages/order-manage/apply-for-after-sales-service/apply-for-after-sales-service"
+        "pages/index/index"
     ],
     ...其他配置
 }
