@@ -1,0 +1,7 @@
+.weui-cover-view {
+  display: block;
+  line-height: 1.2;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: auto;
+}

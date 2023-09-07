@@ -1,0 +1,55 @@
+export const TAGS_MAP = {
+  view: 'wx-view',
+  button: 'wx-button',
+  'button-area': 'wx-button-area',
+  flex: 'wx-flex',
+  'flex-item': 'wx-flex-item',
+  'scroll-view': 'wx-scroll-view',
+  radio: 'wx-radio',
+  cells: 'wx-cells',
+  cell: 'wx-cell',
+  checkbox: 'wx-checkbox',
+  'checkbox-group': 'wx-checkbox-group',
+  switch: 'wx-switch',
+  'radio-group': 'wx-radio-group',
+  input: 'wx-input',
+  slider: 'wx-slider',
+  'action-sheet': 'wx-action-sheet',
+  dialog: 'wx-dialog',
+  toast: 'wx-toast',
+  progress: 'wx-progress',
+  toptips: 'wx-toptips',
+  'picker': 'wx-picker',
+  'picker-view': 'wx-picker-view',
+  'picker-view-column': 'wx-picker-view-column',
+  swiper: 'wx-swiper',
+  'swiper-item': 'wx-swiper-item',
+  icon: 'wx-icon',
+  'movable-area': 'wx-movable-area',
+  'movable-view': 'wx-movable-view',
+  text: 'span',
+  block: 'template',
+  "cover-view": 'div',
+  "cover-image": "wx-image",
+  "image": "wx-image",
+  "img": "wx-image",
+  "textarea": "wx-textarea"
+}
+
+export const TAGS_MAP_LIST = Object.keys(TAGS_MAP).map(key=>TAGS_MAP[key])
+.concat("img","textarea","cover-view", "label","th","tr","td","canvas", "div")
+
+export const EVENTS = {
+  'touchstart': 'touchstart',
+  'touchmove': 'touchmove',
+  'touchcancel': 'touchcancel',
+  'touchend': 'touchend',
+  'tap': 'click',
+  'longpress': 'longpress',
+  'longtap': 'longpress',
+  'transitionend': 'transitionend',
+  'animationstart': 'animationstart',
+  'animationiteration': 'animationiteration',
+  'animationend': 'animationend',
+  'touchforcechange': 'touchforcechange'
+}

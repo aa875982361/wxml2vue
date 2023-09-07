@@ -1,0 +1,97 @@
+/*
+* Tencent is pleased to support the open source community by making WeUI available.
+* 
+* Copyright (C) 2017 THL A29 Limited, a Tencent company. All rights reserved.
+* 
+* Licensed under the MIT License (the "License"); you may not use this file except in compliance
+* with the License. You may obtain a copy of the License at
+* 
+*       http://opensource.org/licenses/MIT
+* 
+* Unless required by applicable law or agreed to in writing, software distributed under the License is
+* distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+* either express or implied. See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+@import "../../base/fn";
+
+.weui-slider-box {
+  display: flex;
+  align-items: center;
+}
+
+.weui-slider-value {
+  color: @weuiTextColorDesc;
+  font-size: 14px;
+  margin-left: 1em;
+  text-align: center;
+}
+
+.weui-slider-tap-area {
+  padding: 15px 18px;
+  flex: 1;
+}
+
+.weui-slider-handle-wrapper {
+  position: relative;
+  height: 2px;
+  border-radius: 5px;
+  background-color: @weuiLineColorLight;
+  cursor: pointer; 
+  transition: background-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.weui-slider-track {
+  height: 100%;
+  width: 0;
+  border-radius: 6px;
+  background-color: @weuiColorPrimary;
+  transition: background-color 0.3s ease;
+}
+
+.weui-slider-handle {
+  width: 28px;
+  height: 28px;
+  margin-top: -14px;
+  margin-left: -14px;
+  background-color: transparent;
+  z-index: 3;
+}
+
+.weui-slider-thumb {
+  z-index: 2;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.weui-slider-handle,
+.weui-slider-thumb {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: border-color 0.3s ease;
+}
+
+.weui-slider-step {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: transparent;
+  z-index: 1;
+}
+.weui-slider-value {
+  color: #888;
+  font-size: 14px;
+  margin-left: 1em;
+  text-align: center;
+}
+.weui-slider-disabled .weui-slider-track {
+  background-color: #ccc;
+}
+.weui-slider-disabled .weui-slider-thumb {
+  background-color: #fff;
+  border-color: #ccc;
+}
