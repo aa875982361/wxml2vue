@@ -1,6 +1,6 @@
 /*!
  * Vue.js v2.6.11
- * (c) 2014-2019 Evan You
+ * (c) 2014-2020 Evan You
  * Released under the MIT License.
  */
 (function (global, factory) {
@@ -630,7 +630,7 @@
 
       if (config.warnHandler) {
         config.warnHandler.call(null, msg, vm, trace);
-      } else if (hasConsole && (!config.silent)) {
+      } else if (hasConsole && (!config.silent) && msg && msg.indexOf("_initFunc") === -1 && msg.indexOf("_sz") === -1) {
         console.error(("[Vue warn]: " + msg + trace));
       }
     };
@@ -1654,12 +1654,12 @@
     var def = prop.default;
     // warn against non-factory defaults for Object & Array
     if (isObject(def)) {
-      warn(
-        'Invalid default value for prop "' + key + '": ' +
-        'Props with type Object/Array must use a factory function ' +
-        'to return the default value.',
-        vm
-      );
+      // warn(
+      //   'Invalid default value for prop "' + key + '": ' +
+      //   'Props with type Object/Array must use a factory function ' +
+      //   'to return the default value.',
+      //   vm
+      // );
     }
     // the raw prop value was also undefined from previous render,
     // return previous default value to avoid unnecessary watcher trigger
@@ -1711,19 +1711,19 @@
     }
 
     if (!valid) {
-      warn(
-        getInvalidTypeMessage(name, value, expectedTypes),
-        vm
-      );
+      // warn(
+      //   getInvalidTypeMessage(name, value, expectedTypes),
+      //   vm
+      // );
       return
     }
     var validator = prop.validator;
     if (validator) {
       if (!validator(value)) {
-        warn(
-          'Invalid prop: custom validator check failed for prop "' + name + '".',
-          vm
-        );
+        // warn(
+        //   'Invalid prop: custom validator check failed for prop "' + name + '".',
+        //   vm
+        // );
       }
     }
   }
@@ -1780,8 +1780,9 @@
   }
 
   function getInvalidTypeMessage (name, value, expectedTypes) {
-    var message = "Invalid prop: type check failed for prop \"" + name + "\"." +
-      " Expected " + (expectedTypes.map(capitalize).join(', '));
+    // var message = "Invalid prop: type check failed for prop \"" + name + "\"." +
+    //   " Expected " + (expectedTypes.map(capitalize).join(', '));
+    var message = "";
     var expectedType = expectedTypes[0];
     var receivedType = toRawType(value);
     var expectedValue = styleValue(value, expectedType);
@@ -1797,7 +1798,7 @@
     if (isExplicable(receivedType)) {
       message += "with value " + receivedValue + ".";
     }
-    return message
+    return ""
   }
 
   function styleValue (value, type) {
@@ -2044,24 +2045,24 @@
     );
 
     var warnNonPresent = function (target, key) {
-      warn(
-        "Property or method \"" + key + "\" is not defined on the instance but " +
-        'referenced during render. Make sure that this property is reactive, ' +
-        'either in the data option, or for class-based components, by ' +
-        'initializing the property. ' +
-        'See: https://vuejs.org/v2/guide/reactivity.html#Declaring-Reactive-Properties.',
-        target
-      );
+      // warn(
+      //   "Property or method \"" + key + "\" is not defined on the instance but " +
+      //   'referenced during render. Make sure that this property is reactive, ' +
+      //   'either in the data option, or for class-based components, by ' +
+      //   'initializing the property. ' +
+      //   'See: https://vuejs.org/v2/guide/reactivity.html#Declaring-Reactive-Properties.',
+      //   target
+      // );
     };
 
     var warnReservedPrefix = function (target, key) {
-      warn(
-        "Property \"" + key + "\" must be accessed with \"$data." + key + "\" because " +
-        'properties starting with "$" or "_" are not proxied in the Vue instance to ' +
-        'prevent conflicts with Vue internals. ' +
-        'See: https://vuejs.org/v2/api/#data',
-        target
-      );
+      // warn(
+      //   "Property \"" + key + "\" must be accessed with \"$data." + key + "\" because " +
+      //   'properties starting with "$" or "_" are not proxied in the Vue instance to ' +
+      //   'prevent conflicts with Vue internals. ' +
+      //   'See: https://vuejs.org/v2/api/#data',
+      //   target
+      // );
     };
 
     var hasProxy =
@@ -4688,7 +4689,7 @@
       // during Vue.extend(). We only need to proxy props defined at
       // instantiation here.
       if (!(key in vm)) {
-        proxy(vm, "_props", key);
+        // proxy(vm, "_props", key);
       }
     };
 
@@ -7649,7 +7650,7 @@
         // skip the update if old and new VDOM state is the same.
         // `value` is handled separately because the DOM value may be temporarily
         // out of sync with VDOM state due to focus, composition and modifiers.
-        // This  #4521 by skipping the unnecesarry `checked` update.
+        // This  #4521 by skipping the unnecessary `checked` update.
         cur !== oldProps[key]
       ) {
         // some property updates can throw
@@ -9104,7 +9105,7 @@
       }
       // tag token
       var exp = parseFilters(match[1].trim());
-      tokens.push(("_s(" + exp + ")"));
+      tokens.push(("_s(" + catchError(exp) + ")"));
       rawTokens.push({ '@binding': exp });
       lastIndex = index + match[0].length;
     }
@@ -9147,10 +9148,10 @@
   function genData (el) {
     var data = '';
     if (el.staticClass) {
-      data += "staticClass:" + (el.staticClass) + ",";
+      data += "staticClass:" + catchError(el.staticClass) + ",";
     }
     if (el.classBinding) {
-      data += "class:" + (el.classBinding) + ",";
+      data += "class:" + catchError(el.classBinding) + ",";
     }
     return data
   }
@@ -9192,10 +9193,10 @@
   function genData$1 (el) {
     var data = '';
     if (el.staticStyle) {
-      data += "staticStyle:" + (el.staticStyle) + ",";
+      data += "staticStyle:" + catchError(el.staticStyle) + ",";
     }
     if (el.styleBinding) {
-      data += "style:(" + (el.styleBinding) + "),";
+      data += "style:(" + catchError(el.styleBinding) + "),";
     }
     return data
   }
@@ -9894,7 +9895,7 @@
         }
       },
       comment: function comment (text, start, end) {
-        // adding anyting as a sibling to the root node is forbidden
+        // adding anything as a sibling to the root node is forbidden
         // comments should still be allowed, but ignored
         if (currentParent) {
           var child = {
@@ -10940,7 +10941,7 @@
     var state = new CodegenState(options);
     var code = ast ? genElement(ast, state) : '_c("div")';
     return {
-      render: ("with(this){return " + code + "}"),
+      render: ("with(this){with(wxs||{}){return " + code + "}}"),
       staticRenderFns: state.staticRenderFns
     }
   }
@@ -10994,7 +10995,7 @@
     if (el.pre) {
       state.pre = el.pre;
     }
-    state.staticRenderFns.push(("with(this){return " + (genElement(el, state)) + "}"));
+    state.staticRenderFns.push(("with(this){with(wxs||{}){return " + (genElement(el, state)) + "}}"));
     state.pre = originalPreState;
     return ("_m(" + (state.staticRenderFns.length - 1) + (el.staticInFor ? ',true' : '') + ")")
   }
@@ -11049,7 +11050,7 @@
 
     var condition = conditions.shift();
     if (condition.exp) {
-      return ("(" + (condition.exp) + ")?" + (genTernaryExp(condition.block)) + ":" + (genIfConditions(conditions, state, altGen, altEmpty)))
+      return ("(" + catchError(condition.exp) + ")?" + (genTernaryExp(condition.block)) + ":" + (genIfConditions(conditions, state, altGen, altEmpty)))
     } else {
       return ("" + (genTernaryExp(condition.block)))
     }
@@ -11062,6 +11063,10 @@
           ? genOnce(el, state)
           : genElement(el, state)
     }
+  }
+
+  function catchError(exp){
+    return `(function(){try{return (${exp});}catch(e){return undefined;}})()`
   }
 
   function genFor (
@@ -11090,9 +11095,15 @@
     }
 
     el.forProcessed = true; // avoid recursion
-    return (altHelper || '_l') + "((" + exp + ")," +
+    return (altHelper || '_l') + "((" + catchError(exp) + ")," +
       "function(" + alias + iterator1 + iterator2 + "){" +
-        "return " + ((altGen || genElement)(el, state)) +
+        "var _wxs = {};" +
+        "Object.assign(_wxs, wxs);" +
+        "var _wxs2 = {" + alias + iterator1 + iterator2 + "};" +
+        "Object.assign(_wxs, _wxs2);" +
+        "return (function(wxs){" + 
+          "return " + ((altGen || genElement)(el, state)) +
+        "})(_wxs);" +
       '})'
   }
 
@@ -11438,6 +11449,7 @@
     for (var i = 0; i < props.length; i++) {
       var prop = props[i];
       var value = transformSpecialNewlines(prop.value);
+      value = catchError(value)
       if (prop.dynamic) {
         dynamicProps += (prop.name) + "," + value + ",";
       } else {
@@ -11646,6 +11658,7 @@
 
   function createFunction (code, errors) {
     try {
+      // console.log("createFunction", code)
       return new Function(code)
     } catch (err) {
       errors.push({ err: err, code: code });
@@ -11725,8 +11738,10 @@
       // turn code into functions
       var res = {};
       var fnGenErrors = [];
+      // console.log("render", compiled.render)
       res.render = createFunction(compiled.render, fnGenErrors);
       res.staticRenderFns = compiled.staticRenderFns.map(function (code) {
+        // console.log("code", code)
         return createFunction(code, fnGenErrors)
       });
 
