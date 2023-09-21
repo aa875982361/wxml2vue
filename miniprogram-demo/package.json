@@ -1,0 +1,52 @@
+{
+  "name": "miniprogram-demo",
+  "version": "1.0.0",
+  "description": "WeChat miniprogram demo",
+  "scripts": {
+    "init": "npm run sync && cd cloudfunctions/ && npm i --production && cd ../miniprogram/ && npm i --production",
+    "lint": "eslint .",
+    "wxss:transform-vars": "gulp transform-css-vars",
+    "sync": "git submodule update --init --recursive",
+    "pull": "git submodule foreach --recursive git pull origin",
+    "gco": "git submodule foreach --recursive git checkout"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wechat-miniprogram/miniprogram-demo.git"
+  },
+  "author": "wechat-miniprogram",
+  "license": "MIT",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/wechat-miniprogram/miniprogram-demo/issues"
+  },
+  "homepage": "https://github.com/wechat-miniprogram/miniprogram-demo#readme",
+  "devDependencies": {
+    "@tencent/eslint-config-wxapp": "^0.5.2",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.1.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-config-alloy": "^3.8.2",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-typescript": "^0.14.0",
+    "gulp": "^4.0.2",
+    "gulp-if": "^3.0.0",
+    "gulp-ignore": "^3.0.0",
+    "gulp-postcss": "^9.0.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.1.3",
+    "miniprogram-automator": "^0.10.0",
+    "postcss": "^8.3.11",
+    "postcss-css-variables": "^0.18.0",
+    "typescript": "^3.2.1",
+    "typescript-eslint-parser": "^22.0.0"
+  },
+  "dependencies": {
+    "jest": "^26.6.3"
+  }
+}

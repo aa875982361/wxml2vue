@@ -1,0 +1,35 @@
+<mp-navigation-bar title="小程序扩展能力展示" back="{{false}}"></mp-navigation-bar>
+<scroll-view class="page-scroll-view" scroll-y type="list">
+<view class="page" data-weui-theme="{{theme}}">
+  <view class="index-hd">
+    <image class="index-logo" src="./images/logo_extended.png"></image>
+    <text class="index-desc">以下是对小程序内置组件能力的补充，包括 WeUI 组件库和一些常见的功能组件，具体属性参数详见 <text class="weui-agree__link" bindtap="navToDoc">小程序开发文档</text>。</text>
+  </view>
+  <view class="page__bd page-weui page__bd_spacing">
+    <view class="kind-list">
+      <block wx:for="{{list}}" wx:key="id">
+        <view class="kind-list__item">
+          <view id="{{item.id}}" class="weui-flex kind-list__item-hd {{item.open ? 'kind-list__item-hd_show' : ''}}" bindtap="kindToggle">
+            <view class="kind-list-text">{{item.name}}</view>
+            <image class="kind-list__img" src="images/icon_nav_{{item.id}}.png"></image>
+          </view>
+          <view class="kind-list__item-bd {{item.open ? 'kind-list__item-bd_show' : ''}}">
+            <view class="navigator-box {{item.open ? 'navigator-box-show' : ''}}">
+              <block wx:for="{{item.pages}}" wx:for-item="page" wx:key="*this">
+                <view wx:if="{{page.url}}">
+                  <navigator url="../../packageExtend/pages/{{page.url}}" class="navigator {{index + 1 === item.pages.length ? '' : 'navigator-bottom-line'}}">{{page.zh}}</navigator>
+                  <view class="navigator-arrow"></view>
+                </view>
+                <view wx:else>
+                  <navigator url="../../packageExtend/pages/{{item.father}}/{{page}}/{{page}}" class="navigator {{index + 1 === item.pages.length ? '' : 'navigator-bottom-line'}}">{{page}}</navigator>
+                  <view class="navigator-arrow"></view>
+                </view>
+              </block>
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>
+</scroll-view>

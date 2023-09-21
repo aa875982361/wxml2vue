@@ -1,0 +1,443 @@
+{
+  "pages": [
+    "page/component/index",
+    "page/API/index",
+    "page/cloud/index",
+    "page/extend/index",
+    "page/animation/index"
+  ],
+  "usingComponents": {
+    "mp-navigation-bar": "/component/navigation-bar/navigation-bar"
+  },
+  "subpackages": [
+    {
+      "root": "packageComponent",
+      "pages": [
+        "pages/view/view/view",
+        "pages/view/scroll-view/scroll-view",
+        "pages/view/swiper/swiper",
+        "pages/view/root-portal/root-portal",
+        "pages/view/grid-view/grid-view",
+        "pages/view/grid-view/demo-1/demo-1",
+        "pages/view/grid-view/demo-2/demo-2",
+        "pages/view/sticky/sticky-header/sticky-header",
+        "pages/view/sticky/sticky-section/sticky-section",
+        "pages/view/movable-view/movable-view",
+        "pages/view/cover-view/cover-view",
+        "pages/view/sticky/sticky",
+        "pages/content/text/text",
+        "pages/content/icon/icon",
+        "pages/content/progress/progress",
+        "pages/content/rich-text/rich-text",
+        "pages/form/button/button",
+        "pages/form/checkbox/checkbox",
+        "pages/form/form/form",
+        "pages/form/input/input",
+        "pages/form/label/label",
+        "pages/form/picker/picker",
+        "pages/form/picker-view/picker-view",
+        "pages/form/radio/radio",
+        "pages/form/slider/slider",
+        "pages/form/switch/switch",
+        "pages/form/textarea/textarea",
+        "pages/form/editor/editor",
+        "pages/nav/navigator/navigator",
+        "pages/nav/navigator/navigate",
+        "pages/nav/navigator/redirect",
+        "pages/media/image/image",
+        "pages/media/video/video",
+        "pages/media/camera/camera",
+        "pages/media/live-pusher/live-pusher",
+        "pages/media/live-player/live-player",
+        "pages/media/channel-video/channel-video",
+        "pages/media/channel-live/channel-live",
+        "pages/map/map/map",
+        "pages/canvas/canvas-2d/canvas-2d",
+        "pages/canvas/webgl/webgl",
+        "pages/open/ad/ad",
+        "pages/open/open-data/open-data",
+        "pages/open/web-view/web-view",
+        "pages/obstacle-free/aria-component/aria-component",
+        "pages/doc-web-view/doc-web-view"
+      ]
+    },
+    {
+      "root": "packageAPI",
+      "pages": [
+        "pages/api/login/login",
+        "pages/api/get-user-info/get-user-info",
+        "pages/api/request-payment/request-payment",
+        "pages/api/jump/jump",
+        "pages/api/share/share",
+        "pages/api/share-button/share-button",
+        "pages/api/custom-message/custom-message",
+        "pages/api/subscribe-message/subscribe-message",
+        "pages/api/choose-address/choose-address",
+        "pages/api/choose-invoice-title/choose-invoice-title",
+        "pages/api/soter-authentication/soter-authentication",
+        "pages/api/setting/setting",
+        "pages/ar/visionkit-basic/visionkit-basic",
+        "pages/ar/visionkit-basic-v2/visionkit-basic-v2",
+        "pages/ar/plane-ar/plane-ar",
+        "pages/ar/plane-ar-v2/plane-ar-v2",
+        "pages/ar/plane-ar-v2-marker/plane-ar-v2-marker",
+        "pages/ar/plane-ar-v2-depth/plane-ar-v2-depth",
+        "pages/ar/plane-ar-3dof/plane-ar-3dof",
+        "pages/ar/2dmarker-ar/2dmarker-ar",
+        "pages/ar/3dmarker-ar/3dmarker-ar",
+        "pages/ar/osd-ar/osd-ar",
+        "pages/ar/face-detect/face-detect",
+        "pages/ar/face-detect-3d/face-detect-3d",
+        "pages/ar/body-detect/body-detect",
+        "pages/ar/hand-detect/hand-detect",
+        "pages/ar/depth-detect/depth-detect",
+        "pages/ar/cameraBuffer-detect/cameraBuffer-detect",
+        "pages/ar/ocr-detect/ocr-detect",
+        "pages/ar/shoe-detect/shoe-detect",
+        "pages/ar/photo-shoe-detect/photo-shoe-detect",
+        "pages/ar/photo-ocr-detect/photo-ocr-detect",
+        "pages/ar/photo-hand-detect/photo-hand-detect",
+        "pages/ar/photo-body-detect/photo-body-detect",
+        "pages/ar/photo-face-detect/photo-face-detect",
+        "pages/ar/photo-depth-detect/photo-depth-detect",
+        "pages/page/set-navigation-bar-title/set-navigation-bar-title",
+        "pages/page/navigation-bar-loading/navigation-bar-loading",
+        "pages/page/navigator/navigator",
+        "pages/page/pull-down-refresh/pull-down-refresh",
+        "pages/page/animation/animation",
+        "pages/page/action-sheet/action-sheet",
+        "pages/page/modal/modal",
+        "pages/page/toast/toast",
+        "pages/page/canvas/canvas",
+        "pages/page/get-wxml-node-info/get-wxml-node-info",
+        "pages/page/page-scroll/page-scroll",
+        "pages/page/intersection-observer/intersection-observer",
+        "pages/device/clipboard-data/clipboard-data",
+        "pages/device/bluetooth/bluetooth",
+        "pages/device/bluetooth/slave/slave",
+        "pages/device/screen-brightness/screen-brightness",
+        "pages/device/vibrate/vibrate",
+        "pages/device/add-contact/add-contact",
+        "pages/device/wifi/wifi",
+        "pages/device/get-network-type/get-network-type",
+        "pages/device/on-network-status-change/on-network-status-change",
+        "pages/device/get-system-info/get-system-info",
+        "pages/device/on-compass-change/on-compass-change",
+        "pages/device/make-phone-call/make-phone-call",
+        "pages/device/scan-code/scan-code",
+        "pages/device/on-accelerometer-change/on-accelerometer-change",
+        "pages/device/capture-screen/capture-screen",
+        "pages/device/ibeacon/ibeacon",
+        "pages/device/get-battery-info/get-battery-info",
+        "pages/media/image/image",
+        "pages/media/voice/voice",
+        "pages/media/file/file",
+        "pages/media/load-font-face/load-font-face",
+        "pages/media/background-audio/background-audio",
+        "pages/media/video/video",
+        "pages/media/audio/audio",
+        "pages/media/media-container/media-container",
+        "pages/location/get-location/get-location",
+        "pages/location/open-location/open-location",
+        "pages/location/choose-location/choose-location",
+        "pages/network/request/request",
+        "pages/network/web-socket/web-socket",
+        "pages/network/upload-file/upload-file",
+        "pages/network/download-file/download-file",
+        "pages/network/mdns/mdns",
+        "pages/network/udp-socket/udp-socket",
+        "pages/storage/storage/storage",
+        "pages/storage/get-background-fetch-data/get-background-fetch-data",
+        "pages/storage/get-background-prefetch-data/get-background-prefetch-data",
+        "pages/performance/get-performance/get-performance",
+        "pages/worker/worker/worker",
+        "pages/framework/two-way-bindings/two-way-bindings",
+        "pages/framework/wxs/wxs",
+        "pages/framework/resizable/resizable",
+        "pages/framework/wxs/movable",
+        "pages/framework/wxs/sidebar",
+        "pages/framework/wxs/stick-top",
+        "pages/framework/wxs/nearby",
+        "pages/ai/mobilenet/index",
+        "pages/ai/style-trans/index",
+        "pages/ai/mobilenet_int8/index"
+      ]
+    },
+    {
+      "root": "packageCloud",
+      "pages": [
+        "pages/user/user-authentication/user-authentication",
+        "pages/database/crud/crud",
+        "pages/database/db-permission/db-permission",
+        "pages/database/server-date/server-date",
+        "pages/storage/upload-file/upload-file",
+        "pages/storage/download-file/download-file",
+        "pages/storage/get-temp-file-url/get-temp-file-url",
+        "pages/storage/delete-file/delete-file",
+        "pages/storage/cloud-file-component/cloud-file-component",
+        "pages/scf/get-wx-context/get-wx-context",
+        "pages/scf/scf-database/scf-database",
+        "pages/scf/scf-storage/scf-storage",
+        "pages/scf/scf-openapi/scf-openapi"
+      ]
+    },
+    {
+      "root": "packageExtend",
+      "pages": [
+        "pages/form/cell/cell",
+        "pages/form/slideview/slideview",
+        "pages/form/form/form",
+        "pages/form/uploader/uploader",
+        "pages/base/article/article",
+        "pages/base/icons/icons",
+        "pages/base/badge/badge",
+        "pages/base/flex/flex",
+        "pages/base/footer/footer",
+        "pages/base/gallery/gallery",
+        "pages/base/grid/grid",
+        "pages/base/loadmore/loadmore",
+        "pages/base/loading/loading",
+        "pages/base/panel/panel",
+        "pages/base/preview/preview",
+        "pages/operate/dialog/dialog",
+        "pages/operate/msg/msg",
+        "pages/operate/msg/msg_success",
+        "pages/operate/msg/msg_text",
+        "pages/operate/msg/msg_text_primary",
+        "pages/operate/msg/msg_fail",
+        "pages/operate/half-screen-dialog/half-screen-dialog",
+        "pages/operate/actionsheet/actionsheet",
+        "pages/operate/toptips/toptips",
+        "pages/navigation/navigation/navigation",
+        "pages/navigation/tabbar/tabbar",
+        "pages/search/searchbar/searchbar",
+        "pages/extend/emoji/emoji",
+        "pages/extend/video-swiper/video-swiper",
+        "pages/extend/index-list/index-list",
+        "pages/extend/recycle-view/recycle-view",
+        "pages/extend/sticky/sticky",
+        "pages/extend/tabs/tabs",
+        "pages/extend/vtabs/vtabs",
+        "pages/extend/barrage/barrage",
+        "pages/extend/select-text/select-text",
+        "pages/extend/wxml-to-canvas/wxml-to-canvas",
+        "pages/adapt/telescopic/telescopic",
+        "pages/adapt/linebreak/linebreak",
+        "pages/adapt/sidenavigation/sidenavigation",
+        "pages/adapt/pagination/pagination",
+        "pages/adapt/freelayout/freelayout",
+        "pages/adapt/layeredpresentation/layeredpresentation",
+        "pages/adapt/horizontalexpansion/horizontalexpansion"
+      ]
+    },
+    {
+      "root": "packageSkyline",
+      "pages": [
+        "pages/worklet/animation/index",
+        "pages/worklet/gesture/index",
+        "pages/share-element/list/index",
+        "pages/share-element/card/index",
+        "pages/worklet/bottom-sheet/index",
+        "pages/half-page/scale-page/index",
+        "pages/half-page/half-page/index"
+      ]
+    },
+    {
+      "root": "packageSkylineExamples",
+      "pages": [
+        "examples/address-book/pages/index/index",
+        "examples/tab-indicator/pages/index/index",
+        "examples/album/pages/album/index",
+        "examples/album/pages/preview/index",
+        "examples/half-screen/pages/index/index",
+        "examples/segmented-half-screen/pages/index/index",
+        "examples/card_transition/pages/list/list",
+        "examples/card_transition/pages/detail/detail",
+        "examples/product-list/pages/index/index",
+        "examples/expanded-scroll-view/pages/index/index",
+        "examples/refresher-two-level/index/index",
+        "examples/refresher-two-level/goods/index"
+      ]
+    },
+    {
+      "root": "packageXRFrame",
+      "pages": [
+        "pages/index/index",
+        "pages/basic/scene-basic/index",
+        "pages/basic/scene-basic-alpha/index",
+        "pages/basic/scene-basic-light/index",
+        "pages/basic/scene-basic-animation/index",
+        "pages/basic/scene-basic-particle/index",
+        "pages/basic/scene-basic-touch/index",
+        "pages/basic/scene-basic-visible-layer/index",
+        "pages/basic/scene-basic-shadow/index",
+        "pages/basic/scene-basic-video/index",
+        "pages/basic/scene-basic-render-texture/index",
+        "pages/basic/scene-basic-postprocessing/index",
+        "pages/basic/scene-basic-envData/index",
+        "pages/basic/scene-basic-share/index",
+        "pages/gltf/scene-gltf-damageHelmet/index",
+        "pages/gltf/scene-gltf-unlit/index",
+        "pages/gltf/scene-gltf-animation/index",
+        "pages/gltf/scene-gltf-morph/index",
+        "pages/gltf/scene-gltf-light-loading/index",
+        "pages/gltf/scene-gltf-specularGlossiness/index",
+        "pages/gltf/scene-gltf-sheen/index",
+        "pages/gltf/scene-gltf-transmission/index",
+        "pages/gltf/scene-gltf-textureTransform/index",
+        "pages/gltf/scene-gltf-lightsPunctual/index",
+        "pages/gltf/scene-gltf-compressTextures/index",
+        "pages/ar/scene-ar-basic/index",
+        "pages/ar/scene-ar-2dmarker/index",
+        "pages/ar/scene-ar-osdmarker/index",
+        "pages/ar/scene-ar-face/index",
+        "pages/ar/scene-ar-hand/index",
+        "pages/ar/scene-ar-body/index",
+        "pages/ar/scene-ar-threeDof/index",
+        "pages/ar/scene-ar-camera/index",
+        "pages/ar/scene-ar-vio-marker/index",
+        "pages/ar/scene-ar-vio-depth/index",
+        "pages/custom/scene-custom-logic/index",
+        "pages/custom/scene-custom-render/index",
+        "pages/scan/scene-scan-render/index",
+        "pages/scan/scene-scan-team/index",
+        "pages/ar-classic/scene-classic-wxball/index",
+        "pages/ar-classic/scene-classic-video/index",
+        "pages/ar-classic/scene-classic-perspect/index",
+        "pages/ar-classic/scene-classic-portal/index",
+        "pages/ar-classic/scene-classic-osd/index",
+        "pages/ar-classic/scene-classic-face/index",
+        "pages/template/xr-template-message/index",
+        "pages/template/xr-template-control/index",
+        "pages/template/xr-template-loading/index",
+        "pages/template/xr-template-toon/index",
+        "pages/template/xr-template-planeShadow/index",
+        "pages/template/xr-template-geometry/index",
+        "pages/template/xr-template-gltfEdit/index",
+        "pages/template/xr-template-gltfAnimation/index",
+        "pages/template/xr-template-gltfOcclusion/index",
+        "pages/template/xr-template-gltfUVAnimation/index",
+        "pages/template/xr-template-blendDouble/index",
+        "pages/template/xr-template-frameEffect/index",
+        "pages/template/xr-template-tracker/index",
+        "pages/template/xr-template-select/index",
+        "pages/template/xr-template-share/index",
+        "pages/template/xr-template-removeBlack/index",
+        "pages/template/xr-template-featherVideo/index",
+        "pages/template/xr-template-arPreview/index",
+        "pages/template/xr-template-lookat/index",
+        "pages/template/xr-template-arui/index",
+        "pages/scene-last-record/index",
+        "pages/scene-beside-edge/index",
+        "pages/physics/scene-physics-shoot/index",
+        "pages/physics/scene-physics-throw/index"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "page/component/index": {
+      "network": "all",
+      "packages": [
+        "packageComponent"
+      ]
+    },
+    "page/API/index": {
+      "network": "all",
+      "packages": [
+        "packageAPI"
+      ]
+    },
+    "page/cloud/index": {
+      "network": "all",
+      "packages": [
+        "packageCloud"
+      ]
+    },
+    "page/extend/index": {
+      "network": "all",
+      "packages": [
+        "packageExtend"
+      ]
+    }
+  },
+  "window": {
+    "navigationBarTextStyle": "@navigationBarTextStyle",
+    "navigationBarTitleText": "演示",
+    "navigationBarBackgroundColor": "@navigationBarBackgroundColor",
+    "backgroundColor": "@backgroundColor"
+  },
+  "tabBar": {
+    "color": "@tabBarColor",
+    "selectedColor": "@tabBarSelectedColor",
+    "borderStyle": "@tabBarBorderStyle",
+    "backgroundColor": "@tabBarBackgroundColor",
+    "list": [
+      {
+        "pagePath": "page/component/index",
+        "iconPath": "@iconPathComponent",
+        "selectedIconPath": "@selectedIconPathComponent",
+        "text": "组件"
+      },
+      {
+        "pagePath": "page/animation/index",
+        "iconPath": "@iconPathComponent",
+        "selectedIconPath": "@selectedIconPathComponent",
+        "text": "交互动画"
+      },
+      {
+        "pagePath": "page/API/index",
+        "iconPath": "@iconPathAPI",
+        "selectedIconPath": "@selectedIconPathAPI",
+        "text": "接口"
+      },
+      {
+        "pagePath": "page/cloud/index",
+        "iconPath": "@iconPathCloud",
+        "selectedIconPath": "@selectedIconPathCloud",
+        "text": "云开发"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "connectSocket": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000
+  },
+  "workers": "workers",
+  "debug": false,
+  "style": "v2",
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "themeLocation": "demo.theme.json",
+  "darkmode": true,
+  "resizable": true,
+  "useExtendedLib": {
+    "weui": "latest"
+  },
+  "frameset": true,
+  "requiredBackgroundModes": [
+    "audio",
+    "location"
+  ],
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation",
+    "chooseAddress"
+  ],
+  "embeddedAppIdList": [
+    "wxfdcee92a299bcaf1"
+  ],
+  "lazyCodeLoading": "requiredComponents",
+  "__lazyCodeLoadingChunk": true,
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true
+    }
+  }
+}

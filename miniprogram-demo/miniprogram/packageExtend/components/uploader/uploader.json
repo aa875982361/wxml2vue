@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "mp-gallery": "../gallery/gallery"
+  },
+  "styleIsolation": "apply-shared"
+}
