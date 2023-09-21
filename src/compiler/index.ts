@@ -55,7 +55,7 @@ const genMiniJS = (miniApp: MiniAppInfo) => {
   console.log("genMiniJS");
   
   let jsStr = '';
-  let appJsPath = path.join(cwd,"/dist/", "./app.js")
+  let cssStr = ''
   let basejsStr = `
 const ngc = require("wxminiapp2vue");
 const { runtime, wx } = ngc;
@@ -76,39 +76,33 @@ window.wxs["${key.replace(/\\/g, '/')}"] = (function() {
 })
 
 
-// `
-// window.wxs = {
-//   ${[...miniApp.wxs.entries()].reduce((s, [key, value]) => {
-//     return s + `"${key.replace(/\\/g, '/')}": (function() {
-//       const module = { exports: {} };
-//       ${value.js};
-//       return module.exports;
-//     })(),\n`
-//   }, '')}
-// }`;
 
   const gen = ( [name, c]: [string, PageComponent]) => {
     // console.log("c.importTemplates", c.importTemplates);
-    
+    const list = c.path.split("/")
     // console.log('gen===>', c.path)
-    const p = path.join("dist/styles", c.path)
-    const dir = path.dirname(p)
-    fs.mkdirSync(dir, { recursive: true })
-    fs.writeFileSync(p + ".css", `${c.cssContent}`)
+    fs.writeFileSync(c.path + "-c.js", `
+    const ngc = require("wxminiapp2vue");
+    ngc.registerTemplate("${c.path}", \`${c.template}\`,\n ${JSON.stringify(c.wxsDeps)}, \n${JSON.stringify(c.dependenceComponent || {})},\n ${JSON.stringify(c.importTemplates || {})});
+    require("./${list[list.length - 1]}");
+`)
+    
+    // 拼接全部css
+    cssStr += c.cssContent + "\n";
     jsStr += `
-/**
- * Path: ${c.path}
- * */
-      var link = document.createElement("link");
-      link.rel  = 'stylesheet';
-      link.type = 'text/css';
-      link.href = 'dist/styles/${c.path}.css';
-      link.media = 'all';
-      document.head.appendChild(link);
-    `
-    jsStr += `ngc.registerTemplate("${c.path}", \`${c.template}\`,\n ${JSON.stringify(c.wxsDeps)}, \n${JSON.stringify(c.dependenceComponent || {})},\n ${JSON.stringify(c.importTemplates || {})});\n`
-    jsStr += `require("${c.path}");\n\n`
+ngc.componentInitFunctionMap["${c.path}"] = async function(){
+  return require.ensure([], function() {
+    /**
+     * Path: ${c.path}
+     * */
+        `
+    jsStr += `require("${c.path}-c");\n`
     jsStr += `
+  }, "${list[list.length - 1]}")
+}
+ngc.componentDependenceMap["${c.path}"] = [${Object.keys(c.dependenceComponent).map((cname: string) => {
+  return `"${c.dependenceComponent[cname].replace(/^\//, '')}"`
+}).join(",")}]
 ///////////////////////////////////////////////////////////////////////////
     `
   }
@@ -224,6 +218,7 @@ window.wxs["${key.replace(/\\/g, '/')}"] = (function() {
     // fs.writeFileSync(p + ".js", jsStr, "utf-8")
     // genHtml(p + ".html");
     fs.writeFileSync(path.join(cwd, "miniapp.js"), jsStr, "utf-8")
+    fs.writeFileSync(path.join(cwd, "main.css"), cssStr, "utf-8")
   }
 }
 
@@ -324,9 +319,6 @@ const convertWxssToCss = (wxss, absPath: string = "", deleteDep:boolean = false)
     }
     let importWxssAbsPath = path.resolve(absPath, '../', matchPart)
     // console.log("importWxssAbsPath", importWxssAbsPath);
-    // if(DependenceWxss.indexOf(importWxssAbsPath) === -1){
-    //   DependenceWxss.push(importWxssAbsPath)
-    // }
     // return `@import url('${matchPart}.css');`
     // 这里要返回 导入的css 除了全局的
     // 读取wxss文件，然后转换为css文件
@@ -334,33 +326,11 @@ const convertWxssToCss = (wxss, absPath: string = "", deleteDep:boolean = false)
     // 转换
     return convertWxssToCss(importCssStr, importWxssAbsPath)
   })
-  // 如果当前导入的css文件在依赖wxss里面 则可以去除 
-  // 加个参数判断要不要去掉 如果是在解析页面收集依赖wxss过程当中 可以去掉 
-  // 如果是在最后解析依赖的时候 则不可去掉 因为我用了数组的长度判断是否结束
-  if(deleteDep && DependenceWxss.indexOf(absPath) !== -1){
-    let index = DependenceWxss.indexOf(absPath);
-    DependenceWxss.splice(index, 1);
-  }
   css = changeRpx2Rem(css)
   // css = css.replace("::-webkit-scrollbar", "::-webkit-scrollbar-unused")
   return css
 }
 
-function loadDependenceWxss(){
-  let absPath = ""
-  let relativePath = ""
-  console.log("DependenceWxss", DependenceWxss)
-  for(var i=0; i<DependenceWxss.length; i++){
-    absPath = DependenceWxss[i];
-    let cssContent = convertWxssToCss(fs.readFileSync(absPath + ".wxss", "utf-8"), absPath);
-    relativePath = absPath.replace(cwd, "");
-    // console.log("import file relative path:", relativePath)
-    const p = path.join("dist/styles", relativePath)
-    const dir = path.dirname(p)
-    fs.mkdirSync(dir, { recursive: true })
-    fs.writeFileSync(p + ".css", `${cssContent}`)
-  }
-}
 class MiniAppInfo {
   public root: string = ""
   public components = new Map()
@@ -389,8 +359,6 @@ class MiniAppInfo {
     this.parseAppWxss();
     let pages = appJson.change2h5Page || []
     const isCompileAllPage = true
-    pages.push("pages/seq-detail/detail-go-group-buy/detail-go-group-buy")
-    pages.push("pages/seq-detail/detail-start-group-grandchild/detail-start-group-grandchild")
     if(isCompileAllPage){
       pages = appJson.pages || []
       // 处理分包页面
@@ -611,8 +579,6 @@ const compile = (p: string): void => {
   // 生成小程序渲染页面 miniapp.html 
   // 这个页面引入了vue 引入了小程序运行逻辑
   genHtml()
-  // 将依赖到的wxss 也进行编译
-  loadDependenceWxss();
   // 复制vue的运行库
   copyVueMinJS()
   // 复制websdk文件
@@ -672,6 +638,7 @@ const makeBundle = (p: string): void => {
     },
     output: {
       // filename: 'main.js',
+      publicPath: '/dist/',
       path: path.resolve(p, 'dist'),
     },
   }, (err: Error, stats: any) => {
@@ -685,8 +652,3 @@ const makeBundle = (p: string): void => {
 }
 
 main()
-
-
-// var res = convertWxssToCss(`@import '../detail-start-group/detail-start-group';@import '../../../styles/detail-share';`, "/Users/plinghuang/qunjielong/qjl-plus/packages/mini/dist/pages/seq-detail/detail-form/detail-form")
-// console.log(res);
-// loadDependenceWxss()

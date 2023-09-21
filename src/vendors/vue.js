@@ -10941,7 +10941,7 @@
     var state = new CodegenState(options);
     var code = ast ? genElement(ast, state) : '_c("div")';
     return {
-      render: ("with(this){with(wxs||{}){return " + code + "}}"),
+      render: ("with(this){return " + code + "}"),
       staticRenderFns: state.staticRenderFns
     }
   }
@@ -10995,7 +10995,7 @@
     if (el.pre) {
       state.pre = el.pre;
     }
-    state.staticRenderFns.push(("with(this){with(wxs||{}){return " + (genElement(el, state)) + "}}"));
+    state.staticRenderFns.push(("with(this){{return " + (genElement(el, state)) + "}"));
     state.pre = originalPreState;
     return ("_m(" + (state.staticRenderFns.length - 1) + (el.staticInFor ? ',true' : '') + ")")
   }

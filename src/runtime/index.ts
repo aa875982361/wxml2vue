@@ -57,6 +57,8 @@ let currentWxs = {}
 let currentUsingComponents = {}
 let allComponentsMap = {}
 let currentImportTemplates = []
+export const componentInitFunctionMap = {}
+export const componentDependenceMap = {}
 
 Vue.config.errorhandler = function(err, vm){
   console.log("vue err", err, vm)
@@ -217,7 +219,7 @@ const setData = function(obj, callback) {
     // 渲染层数据
     assign.call(this, this.wxs, JSON.parse(JSON.stringify(obj)), true)
     // 逻辑层数据
-    assign.call(this, this.data, JSON.parse(JSON.stringify(obj)), false)
+    assign.call(this, this.data, obj, false)
   } catch (error) {
     console.log("setData Object.assign error", error)
   }
@@ -390,6 +392,11 @@ const getComponentMethodEvent = function(name: string, e, dataset) {
 }
 
 const getInputReturn = function(name: string, key: string, dataset: any ,e: any) {
+  if(!e || !(e instanceof CustomEvent)){
+    // 没有事件 或者不是自定义事件 则不处理
+    // textarea 的 blur 事件
+    return
+  }
   // 代理dataset
   const returnInput = this[name](e)
   if(typeof returnInput === "undefined"){
@@ -669,9 +676,11 @@ export const Component = (com) => {
  * @param importTemplates 无状态组件列表
  */
 function addImportTemplate(componentList = {}, importTemplates = [], wxs = {}){
+  const dependenceComponents = {...componentList}
   importTemplates.forEach(component=>{
     componentList[component.name] = {
       ...component,
+      components: dependenceComponents,
       props: {
         tdata: {
           type: Object,
@@ -807,7 +816,7 @@ export const handleScroll = function (vdom) {
 
 let isFirst = true
 
-export const routeTo = (url: string, isReplace:boolean = false) => {
+export const routeTo = async (url: string, isReplace:boolean = false) => {
   if (isFirst) {
     app.onLaunch({ 
       scene: 1001,
@@ -824,6 +833,10 @@ export const routeTo = (url: string, isReplace:boolean = false) => {
     hideWrapper: true,
     ...urlObj.queryObj,
   }
+  // 加载页面代码
+  await registerComponentOrPage(urlObj.realUrl)
+  // 加载页面依赖的组件
+  
   if(!pages.has(urlObj.realUrl)){
     console.error("当前页面未编译，需要增加页面逻辑")
     console.log("path", urlObj.realUrl)
@@ -944,6 +957,27 @@ export const routeTo = (url: string, isReplace:boolean = false) => {
 
 }
 
+// 按需加载组件
+const registerComponentOrPage = async (compPath: string ) => {
+  const initFunc = componentInitFunctionMap[compPath]
+  // 判断是否加载过
+  if(initFunc && initFunc.isLoad){
+    return
+  }
+  if(typeof initFunc === "function"){
+    initFunc.isLoad = true
+    // 获取依赖的组件列表
+    const dependenceComponents = componentDependenceMap[compPath] || []
+    dependenceComponents.map(async (dependenceCompPath) => {
+      // 注册依赖组件
+      await registerComponentOrPage(dependenceCompPath)
+    })
+    await initFunc()
+  }else{
+    console.error("寻找注册函数失败")
+  }
+}
+
 export const parseComponents = (rawComponents: Object) =>{
   if(typeof rawComponents !== "object"){
     return {}
@@ -955,19 +989,18 @@ export const parseComponents = (rawComponents: Object) =>{
       console.warn("请检查usingComponent的配置，存在控制");
       return components;
     }
-    // 如果名字相同则不需要处理
-    const pathSplitList = path.split("/")
-    if(pathSplitList.length > 0 && pathSplitList[pathSplitList.length-1] === cname){
-      return components;
-    }
     if(path.indexOf('/') === 0){
       path = path.substring(1)
     }
     
-    components[cname] = () => {
+    components[cname] = async () => {
       let component = allComponentsMap[path]
       if(!component){
         console.warn("没找到对应的component 请检查组件路径");
+        // 没找到的时候 才开始注册
+        await registerComponentOrPage(path)
+        // 再获取一遍
+        component = allComponentsMap[path]
       }
       return component;
     }

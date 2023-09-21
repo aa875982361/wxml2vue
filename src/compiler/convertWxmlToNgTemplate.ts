@@ -81,10 +81,12 @@ function baseHandleWxml(wxmlString: string){
   wxmlString = wxmlString.replace(/\<\s*([^\s\/\>]+)[^\>]+?\/\s*\>/g, (a, b) => {
     return a.replace(/\s*\/>/, '>') + `</${b}>`
   })
+
   wxmlString = wxmlString.replace(/<(\w[-\w]+) (.*?)\/>/g, (all, $1, $2) => {
     // 处理自己结束的标签 比如 <detail-intro />
     return `<${$1} ${$2}></${$1}>`
   })
+  
   // console.log("驼峰转化前", wxmlString)
   wxmlString = wxmlString.replace(/<[\w\-]+\s+(?:[^<\/>]+?(?:=(\"|\')(.*?)\1)?)+\s*\/?>/g, (a) => {
     // console.log("驼峰转化 ", a)
@@ -133,7 +135,6 @@ export const convertWxmlTemplateToVueTemplate = (wxmlString: string, dependenceC
   const fragment: TreeNode[] = preprocessNodes(htmlNode.childNodes[1].childNodes, ctx)
   // 转化fragement
   wxmlFragment2Vue(fragment, ctx)
-  // console.log("ctx templateList", ctx.templateList);
   const templateList:any[] = []
   Object.keys(ctx.templateList).forEach(name=>{
     const template = {
@@ -141,6 +142,7 @@ export const convertWxmlTemplateToVueTemplate = (wxmlString: string, dependenceC
       template: `${ctx.templateList[name].join("").replace(/vue-template/g, "div")}`,
       wxs: ctx.wxs
     }
+    // console.log("ctx templateList", template.template);
     templateList.push(template)
   })
   return templateList
