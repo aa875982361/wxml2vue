@@ -74,8 +74,15 @@ class NodesRef {
       const { left, right, top, bottom, width, height, } = this.node.getBoundingClientRect()
       const res = {
         scrollLeft: left,
-        scrollTop: top,
-        left, right, top, bottom, width, height, id: this.node.id, dataset: this.node.dataset
+        scrollTop: -top,
+        left, 
+        right,
+        top: -top, 
+        bottom: -bottom,
+        width, 
+        height,
+        id: this.node.id,
+        dataset: this.node.dataset
       }
       cb?.(res)
       return res
