@@ -34,10 +34,10 @@ npm run build:ts
 ```
 
 ```
-# qjl-plus需要先 npm run restart 构建出dist 文件夹
-cd 文件目录/qjl-plus/packages/mini/dist
+# mini_program
+cd 文件目录/mini_program/
 # dist文件夹下的app.json  需要增加 change2h5Page
-node 自己目录/wxml2vue/src/compiler/run 自己目录/qjl-plus/packages/mini/dist/
+node 自己目录/wxml2vue/src/compiler/run 自己目录/mini_program/
 http-server -p 8081 ./
 ```
 
