@@ -9,6 +9,13 @@ declare const Vue: any;
 declare const wx: any;
 // 注释
 (window as any)._forData = undefined
+// 获取屏幕宽高
+const windowWidth = window.screen.width
+const windowHeight = window.screen.height
+// 屏幕像素比例
+const devicePixelRatio = window.devicePixelRatio
+// 状态栏高度
+const statusBarHeight = 30
 
 const app: any = {
   globalData: {
@@ -17,27 +24,27 @@ const app: any = {
       batteryLevel: 100,
       benchmarkLevel: 1,
       brand: "devtools",
-      devicePixelRatio: 3,
+      devicePixelRatio,
       fontSizeSetting: 16,
       language: "zh",
       model: "iPhone X",
-      pixelRatio: 3,
+      pixelRatio: devicePixelRatio,
       platform: "devtools",
       safeArea: {
-        bottom: 812,
-        height: 768,
+        bottom: windowHeight,
+        height: windowHeight - statusBarHeight,
         left: 0,
-        right: 375,
-        top: 44,
-        width: 375,
+        right: windowWidth,
+        top: statusBarHeight,
+        width: windowWidth,
       },
-      screenHeight: 812,
-      screenWidth: 375,
-      statusBarHeight: 44,
+      screenHeight: windowHeight,
+      screenWidth: windowWidth,
+      statusBarHeight: statusBarHeight,
       system: "iOS 10.0.1",
       version: "7.0.4",
-      windowHeight: 812,
-      windowWidth: 375,
+      windowHeight,
+      windowWidth,
     }
   }
 }
