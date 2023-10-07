@@ -125,6 +125,11 @@ class MyIntersectionObserver {
     this.marginObj = {}
     this.obsTargetList = []
   }
+  relativeTo(selector: string, marginObj: MarginObj){
+    this.root = document.querySelector(selector)
+    this.marginObj = marginObj
+    return this
+  }
   relativeToViewport(marginObj: MarginObj){
     this.marginObj = marginObj
     return this
@@ -154,6 +159,7 @@ class MyIntersectionObserver {
           }
         })
         const obj = {
+          id: entry.target.id,
           dataset:realDataset, 
           intersectionRatio: entry.intersectionRatio, 
           boundingClientRect: entry.boundingClientRect,
@@ -165,7 +171,7 @@ class MyIntersectionObserver {
         callBackFunc(obj)
       })
     }, {
-      // ['root']: document.body,
+      // ['root']: this.root,
       rootMargin: `${marginObj.top || 0}px ${marginObj.right || 0}px ${marginObj.bottom || 0}px ${marginObj.left || 0}px`,
       [this.options?.threshold && 'threshold']: this.options?.threshold,
     })

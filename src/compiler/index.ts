@@ -285,13 +285,15 @@ class PageComponent {
       // console.log("解析完成", this.absPath.indexOf("detail-group-buy") >= 0 && parsedWxml.template);
       this.template = parsedWxml.template
       this.rawWxs = parsedWxml.wxs
-      try {
-        this.jsContent = fs.readFileSync(this.absPath + ".js", "utf-8")
-      } catch (error) {
-        this.jsContent = fs.readFileSync(this.absPath + ".ts", "utf-8")
-      }
+      Object.keys(parsedWxml.templateList || {}).map(name => {
+        importTemplates.push({
+          name,
+          template: parsedWxml.templateList[name].join("").replace(/vue-template/g, "div"),
+        })
+      })
+      this.jsContent = fs.readFileSync(this.absPath + ".js", "utf-8")
       const wxssPath = this.absPath + ".wxss"
-      this.cssContent = fs.existsSync(wxssPath) ? convertWxssToCss(fs.readFileSync(wxssPath, "utf-8"), this.absPath, true).replace(/\/\*(.*?)\*\//g, "") : ""
+      this.cssContent = fs.existsSync(wxssPath) ? convertWxssToCss(fs.readFileSync(wxssPath, "utf-8"), this.absPath, true) : ""
 
       const [css, template] = scopeCssAndHTML(this.cssContent, this.template, this.isComponent, uid)
       // const [css, template] = [this.cssContent, this.template]

@@ -523,7 +523,13 @@ const wxApisObj = {
       url, method, data,
       headers: {
         ...header,
+        // Authorization: "eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjU0NzE3NDQsImV4cCI6MTU5NjY4MjY4MH0.OvV-mrkO2C_9Y3FI3p99rDphmMzCohWRfm3Nk5uLthI",
       },
+      // baseURL: url.startsWith("http")
+      //   ? process.env.NODE_ENV === "dev"
+      //     ? "http://mina.test.office.qunjielong.com/"
+      //     : "https://apipro.qunjielong.com/"
+      //   : "",
     })
       .then((res) => {
         const { data, status, headers } = res

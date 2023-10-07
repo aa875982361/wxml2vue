@@ -5,6 +5,7 @@ import space from '../space'
 import { ComponentInstance, VNode } from 'vue'
 import { createIntersectionObserver } from './wxApis/wxml'
 import { navigatorComponent } from './globalComponent/navigator'
+import { animate, clearAnimation } from "./wxApis/animate"
 
 declare const Vue: any;
 declare const wx: any;
@@ -169,7 +170,7 @@ const assign = function(origin, other = {}, isSet = false){
             }
             preKey = preKey.replace(/\"|\'/g, '')
             if(typeof preObj[prePreKey] === "undefined"){
-              isArray = !isNaN(+Number(preKey))
+              isArray = !isNaN(+Number(preKey)) && Number(preKey) < 10000
               preObj[prePreKey] = isArray ? [] : {}
               // isSet && this.$set(preObj, prePreKey, isArray ? [] : {})
               // 不是数组 是对象 并且前一个对象上没有这个属性
@@ -187,7 +188,7 @@ const assign = function(origin, other = {}, isSet = false){
       }
       if(prePreKey !== "" || preKey !== ""){
         if(typeof preObj[prePreKey] === "undefined"){
-          isArray = !isNaN(+Number(preKey))
+          isArray = !isNaN(+Number(preKey)) && Number(preKey) < 10000
            preObj[prePreKey] = isArray ? [] : {}
           //  isSet && this.$set(preObj, prePreKey, isArray ? [] : {})
         }
@@ -524,7 +525,12 @@ export const Component = (com) => {
               // 首次 且没赋值 则不触发
               return
             }
-            props[next].observer && props[next].observer.apply(this, args)
+            const observer = props[next].observer
+            if(typeof observer === "function"){
+              observer.apply(this, args)
+            }else if (typeof observer === "string"){
+              this[observer].apply(this, args)
+            }
             isFirst = false
           } catch (error) {
             console.error("触发监听函数失败", next)
@@ -563,6 +569,8 @@ export const Component = (com) => {
         getInputReturn,
         getComponentMethodEvent,
         createIntersectionObserver,
+        animate,
+        clearAnimation,
         selectComponent,
         ...(behaviors.methods || {})
       },
@@ -852,7 +860,7 @@ export const routeTo = async (url: string, isReplace:boolean = false) => {
   const { template, page, wxs: rawWxs, components: rawComponents, importTemplates } = pages.get(urlObj.realUrl)!
 
   const [pageMethods, props] = extractMethodsAndProps(page)
-  const methods = Object.assign(pageMethods, { _sz, setData, getHandleMethodEvent, getInputReturn, getComponentMethodEvent, selectComponent,   createIntersectionObserver })
+  const methods = Object.assign(pageMethods, { _sz, setData, getHandleMethodEvent, getInputReturn, getComponentMethodEvent, selectComponent,   createIntersectionObserver, animate, clearAnimation })
   const wxs = parseWxs(rawWxs) || {};
   const initData = {
     customFailPage: false,

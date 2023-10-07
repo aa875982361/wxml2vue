@@ -104,10 +104,13 @@ function baseHandleWxml(wxmlString: string){
  */
 export const convertWxmlToVueTemplate = (wxmlString: string, filePath: string = "", dependenceComponent: any, cwd: string, uid: string): IContext => {
   wxmlString = baseHandleWxml(wxmlString);
+  wxmlString = wxmlString.replace(/<template/g, "<vue-template")
+  wxmlString = wxmlString.replace(/\/template>/g, "/vue-template>")
+
   // 解析字符串为ast语法树
   const ast = parse(wxmlString) as any
   // 初始化对象
-  const ctx = { lines: [], ngTemplateCounter: 0, template: "", wxs: [], path: filePath, dependenceComponent, cwd, uid }
+  const ctx = { lines: [], ngTemplateCounter: 0, template: "", wxs: [], path: filePath, dependenceComponent, cwd, uid, templateList: {} }
   // 拿到根节点
   const htmlNode = getHtmlNode(ast)
   // 初步处理node节点为一个flagement
@@ -142,7 +145,7 @@ export const convertWxmlTemplateToVueTemplate = (wxmlString: string, dependenceC
       template: `${ctx.templateList[name].join("").replace(/vue-template/g, "div")}`,
       wxs: ctx.wxs
     }
-    // console.log("ctx templateList", template.template);
+    // console.log("ctx templateList", name);
     templateList.push(template)
   })
   return templateList
@@ -198,9 +201,10 @@ export const wxmlFragment2Vue = (fragment: TreeNode[], ctx: IContext) => {
   for (const node of fragment) {
     if (node.nodeName === "wxs") {
       ctx.wxs.push(node)
-    } else if (node.nodeName === "vue-template"){
-      const name = parseTemplateName(node)
-      // console.log("vue-template name", name);
+    } else if ((node.nodeName === "vue-template") && node.attrsMap.get("name")?.value){
+      const name = node.attrsMap.get("name").value
+      node.nodeName = "vue-template"
+      // console.log("vue-template name", name, node);
       if(!ctx.linesStack){
         ctx.linesStack = []
       }
@@ -209,7 +213,7 @@ export const wxmlFragment2Vue = (fragment: TreeNode[], ctx: IContext) => {
       // 将上一个lines 放进栈里
       ctx.linesStack.push(ctx.lines)
       ctx.lines = lines;
-      ctx.lines.push(parseWxmlNodeToVueStartTag(node, ctx))
+      ctx.lines.push(`<vue-template>`)
       wxmlFragment2Vue(node.childNodes as any, ctx)
       ctx.lines.push(getParsedWxmlEndTagName(node))
       // 回退到上一个收集template的节点
@@ -217,7 +221,7 @@ export const wxmlFragment2Vue = (fragment: TreeNode[], ctx: IContext) => {
     } else if (!node.nodeName.startsWith("#")) {
       ctx.lines.push(parseWxmlNodeToVueStartTag(node, ctx))
       wxmlFragment2Vue(node.childNodes as any, ctx)
-      ctx.lines.push(getParsedWxmlEndTagName(node, (node.nodeName === "template" ? toKebab(parseTemplateName(node)) : '')))
+      ctx.lines.push(getParsedWxmlEndTagName(node, (node.nodeName === "vue-template" ? toKebab(parseTemplateName(node)) : '')))
     } else {
       if (node.nodeName === "#text") {
         // console.log("node.nodeName === #text", (node as any).value)
@@ -239,7 +243,7 @@ const parseWxmlNodeToVueStartTag = (node: TreeNode,  ctx: IContext): string => {
   let attrsStr = parseWxmlNodeToAttrsString(node, tagName, ctx, isDiyComponet)
   const typeAttrStr = getTypeAttrStr(node.nodeName, tagName)
   const hasShadow = isDiyComponet ? `:shadow="'${ctx.dependenceComponent[tagName]}'"` : ""
-  if(node.nodeName === "template" && parseTemplateName(node)){
+  if(node.nodeName === "vue-template" && parseTemplateName(node)){
     tagName = toKebab(parseTemplateName(node))
   }
   if(tagName === "include"){
@@ -318,7 +322,7 @@ const parseWxmlAttrToVueAttrStr = (attr: Attribute, node: TreeNode, tagName: str
   if(n === "class"){
     attr.value = `${ctx.uid} ${attr.value}`
   }
-  const isDataObj = tagName === "template" && n === "data"
+  const isDataObj = tagName === "vue-template" && n === "data"
   const v = attr.value ? stripDelimiters(attr.value, isDataObj) : true
 
   if(StyleAndClass.has(n)){
@@ -353,10 +357,10 @@ const parseWxmlAttrToVueAttrStr = (attr: Attribute, node: TreeNode, tagName: str
     let functionName = attr.name.replace(/bind:?/, "").replace(/catch:?/, "")
     const dataSetList = getCurrentTargetDataSet(node)
     return `@${functionName}="getComponentMethodEvent(${v}, $event, { ${dataSetList.join(",")} })"`
-  } else if (tagName === "template" && attr.name === "data"){
+  } else if (tagName === "vue-template" && attr.name === "data"){
     // console.log("data:", v)
     return `:t${attr.name}="${v}"`
-  } else if ((tagName === "template" && attr.name === "is") || (tagName === "vue-template" && attr.name === "name")){
+  } else if ((tagName === "vue-template" && attr.name === "is") || (tagName === "vue-template" && attr.name === "name")){
     return ""
   } else if (tagName === "span" && n === "space") {
     // 处理 space="nbsp" 的情况 增加自定义指令
