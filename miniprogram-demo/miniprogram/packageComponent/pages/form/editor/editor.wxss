@@ -1,4 +1,3 @@
-/* @import "../../../weui/components/weui-wxss/dist/style/weui.wxss"; */
 @import "./assets/iconfont.wxss";
 
 page>view {

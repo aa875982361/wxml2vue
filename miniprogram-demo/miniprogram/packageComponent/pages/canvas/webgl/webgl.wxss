@@ -1,4 +1,3 @@
-/* @import '../../../common//lib/weui.wxss'; */
 
 .canvas {
   width: 305px;
