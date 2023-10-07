@@ -10,4 +10,5 @@ yarn-debug.log*
 yarn-error.log*
 node_modules
 miniprogram_npm
+*-c.js
 

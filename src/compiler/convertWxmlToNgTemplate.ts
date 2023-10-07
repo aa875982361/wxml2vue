@@ -221,8 +221,9 @@ export const wxmlFragment2Vue = (fragment: TreeNode[], ctx: IContext) => {
     } else {
       if (node.nodeName === "#text") {
         // console.log("node.nodeName === #text", (node as any).value)
-        
-        ctx.lines.push((node as any).value?.replace(/{{(.*?)}}/g, (all, $1)=>{
+        let val = (node as any).value
+        val && (val = val.replace(/`/g, '~'))
+        ctx.lines.push(val?.replace(/{{(.*?)}}/g, (all, $1)=>{
           return `{{${convertToSFunction($1, false)}}}`
         }))
       } else {
@@ -483,7 +484,8 @@ const checkIsHasDelimiters = (val: string): boolean => {
 }
 
 const stripDelimiters = (val: string, isDataObj: boolean = false): string => {
-
+  val && (val = val.replace(/'/g, '"'))
+  val && (val = val.replace(/`/g, '~'))
   if(val.indexOf("{{") === -1){
     // 存粹字符 没有表达式
     return `'${val}'`
@@ -495,10 +497,10 @@ const stripDelimiters = (val: string, isDataObj: boolean = false): string => {
     return convertToSFunction(result, isDataObj)
   }
   // 如果有一对以上的 或者不是头尾 {{}} 则需要用表达式连接 比如 class="wrapper {{a ? 'test': 't2'}}"
-  
+
   const result = "'" + val.replace(/{{(.*?)}}/g, (all, $1 = '') => {
     return `'+(${$1})+'`
-  }).replace(/"/g, "'") + "'"
+  }).replace(/"/g, '\"') + "'"
   // console.log("result22", result)
   return convertToSFunction(result, false)
 }

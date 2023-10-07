@@ -24,6 +24,8 @@ const scopeCssAndHTML = (css: string, html: string, isComponent: boolean, uid: s
   // const uid = suid()
   let preCss = "";
   let importReg = /\@import\s*url\((\'|\")(.*?)(\'|\")\);/g
+  // 删除注释代码
+  css = css.replace(/\/\*(.*?)\*\//g, "")
   css = css.replace(importReg, (a) => {
     preCss += a;
     return ""
@@ -283,9 +285,13 @@ class PageComponent {
       // console.log("解析完成", this.absPath.indexOf("detail-group-buy") >= 0 && parsedWxml.template);
       this.template = parsedWxml.template
       this.rawWxs = parsedWxml.wxs
-      this.jsContent = fs.readFileSync(this.absPath + ".js", "utf-8")
+      try {
+        this.jsContent = fs.readFileSync(this.absPath + ".js", "utf-8")
+      } catch (error) {
+        this.jsContent = fs.readFileSync(this.absPath + ".ts", "utf-8")
+      }
       const wxssPath = this.absPath + ".wxss"
-      this.cssContent = fs.existsSync(wxssPath) ? convertWxssToCss(fs.readFileSync(wxssPath, "utf-8"), this.absPath, true) : ""
+      this.cssContent = fs.existsSync(wxssPath) ? convertWxssToCss(fs.readFileSync(wxssPath, "utf-8"), this.absPath, true).replace(/\/\*(.*?)\*\//g, "") : ""
 
       const [css, template] = scopeCssAndHTML(this.cssContent, this.template, this.isComponent, uid)
       // const [css, template] = [this.cssContent, this.template]
@@ -309,10 +315,13 @@ const convertWxssToCss = (wxss, absPath: string = "", deleteDep:boolean = false)
   let css = wxss
   // component的样式在小程序里面需要import进来，但是在h5里面已经全局加载，不需要再引入 
   // 下面的正则是为了去除全局样式的引入
+  
   let commonWxssReg = /@import\s(\"|')(.*?)\/styles\/(common|flex)(.wxss)?(\"|');/g
   css = css.replace(commonWxssReg, "")
   // import 的查找 如果wxss里面有import 就把import的文件名称收集起来，后面同一处理
   let importReg = /\@import\s*(\'|")(.*?)(\.wxss)?(\'|");/g
+  // 删除注释代码
+  css = css.replace(/\/\*(.*?)\*\//g, "")
   css = css.replace(importReg, (all, _, matchPart)=>{
     if(/^\w/.test(matchPart)){
       matchPart = "./" + matchPart;
@@ -358,7 +367,7 @@ class MiniAppInfo {
     // 先处理主目录下的wxss
     this.parseAppWxss();
     let pages = appJson.change2h5Page || []
-    const isCompileAllPage = true
+    const isCompileAllPage = false
     if(isCompileAllPage){
       pages = appJson.pages || []
       // 处理分包页面
@@ -424,6 +433,12 @@ class MiniAppInfo {
           return
         }
         pc.dependenceComponent[key] = p.replace(this.root, "")
+        if(p.indexOf("weui-miniprogram") >= 0 
+        || p.indexOf("miniprogram-recycle-view") >= 0
+        || p.includes("miniprogram-barrage")
+        || p.includes("wxml-to-canvas")){
+          return
+        }
         deps.set(key, this.parseComponentByPath(p))
       })
     }
@@ -629,6 +644,17 @@ const makeBundle = (p: string): void => {
     },
     module: {
       rules: [
+        {
+          // 正则检查所有的js文件
+          test: /\.js$/,
+          // 使用的babel-loader转换规则
+          use: {
+              loader: 'babel-loader',
+              options: {}
+          },
+          // 排除不被应用编译
+          exclude: '/node_modules/'
+        },
         {
           test: /\.tsx?$/,
           use: 'ts-loader',

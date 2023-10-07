@@ -4,6 +4,7 @@ import { changeRpx2Rem } from '../utils'
 import space from '../space'
 import { ComponentInstance, VNode } from 'vue'
 import { createIntersectionObserver } from './wxApis/wxml'
+import { navigatorComponent } from './globalComponent/navigator'
 
 declare const Vue: any;
 declare const wx: any;
@@ -73,6 +74,7 @@ Vue.filter('changeRpxToRemFilter', function (value) {
 // Vue.use(shadow)
 // 注册space命令 处理空格符
 Vue.use(space)
+Vue.component("navigator", navigatorComponent)
 
 const getUrlQuery = () => {
   const url = window.location.href
