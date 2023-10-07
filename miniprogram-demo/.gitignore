@@ -11,4 +11,9 @@ yarn-error.log*
 node_modules
 miniprogram_npm
 *-c.js
+main.css
+miniapp.html
+miniapp.js
+outputDIYComponentsHasClassAttr.json
+
 
