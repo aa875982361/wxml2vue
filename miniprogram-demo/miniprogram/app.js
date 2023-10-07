@@ -50,12 +50,6 @@ App({
     console.log('@@@ systemInfo ', systemInfo)
     Object.assign(this.globalData, systemInfo)
     // eslint-disable-next-line promise/always-return
-    require.async('./packageSkyline/common/custom-route/index.js').then(utils => {
-      console.log('--------begin installRouteBuilder')
-      utils.installRouteBuilder() // 'common'
-    }).catch(({mod, errMsg}) => {
-      console.error(`installRouteBuilder path: ${mod}, ${errMsg}`)
-    })
   },
 
 
