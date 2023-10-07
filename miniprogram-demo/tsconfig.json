@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["typings", "node_modules/@types"],
+    "module": "commonjs",
+    "target": "es2015",
+    "allowJs": true,
+  },
+  "include": ["miniprogram/**/*.ts", "miniprogram/vendors/wx-*.js"],
+}
